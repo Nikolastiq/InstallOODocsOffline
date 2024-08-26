@@ -1,6 +1,5 @@
 @echo off
 
-
 REM Install Visual C++ Redistributables
 echo Installing Visual C++ (2013) Redistributables
 vcredist_x64.exe /quiet
@@ -54,7 +53,6 @@ if not exist "%PGPASS_DIR%" (
 
 echo localhost:5432:*:postgres:postgres> "%APPDATA%\postgresql\pgpass.conf"
 
-
 REM Change directory to PostgreSQL bin folder
 cd /d "C:\Program Files\PostgreSQL\12\bin"
 
@@ -68,6 +66,31 @@ del "%APPDATA%\postgresql\pgpass.conf"
 
 REM Indicate that all installations and database setup are complete
 echo All installations and database setup are complete.
+
+REM Ask user if they want to install OnlyOffice Docs
+set /p installOnlyOffice=Do you want to install OnlyOffice Docs? (yes/no): 
+
+if /i "%installOnlyOffice%"=="yes" (
+    REM Get the current directory
+    set "currentDir=%cd%"
+    echo Current directory is %currentDir%.
+
+    REM Check and run the appropriate OnlyOffice installer
+    if exist "%currentDir%\onlyoffice-documentserver.exe" (
+        echo Installing OnlyOffice DocumentServer...
+        "%currentDir%\onlyoffice-documentserver.exe"
+    ) else if exist "%currentDir%\onlyoffice-documentserver-de.exe" (
+        echo Installing OnlyOffice DocumentServer DE...
+        "%currentDir%\onlyoffice-documentserver-de.exe"
+    ) else if exist "%currentDir%\onlyoffice-documentserver-ee.exe" (
+        echo Installing OnlyOffice DocumentServer EE...
+        "%currentDir%\onlyoffice-documentserver-ee.exe"
+    ) else (
+        echo No OnlyOffice DocumentServer installer found in the current directory.
+    )
+) else (
+    echo Skipping OnlyOffice Docs installation.
+)
 
 REM Pause the script to allow the user to review the output
 pause
